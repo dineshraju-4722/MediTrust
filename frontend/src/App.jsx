@@ -1,10 +1,15 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Navbar } from './components/commonComponents/Navbar'
 
 function App() {
 
   return (
-    <p className='text-2xl underline'>fbiuewnj</p>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Navbar />} />
+      </Routes>
+    </Router>
   )
 }
 
