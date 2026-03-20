@@ -1,0 +1,14 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:postgresql://localhost/meditrust
+    username: postgres
+    password: PostgreSQL@4722
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+server:
+  port: 8082
