@@ -8,6 +8,7 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<LoginPage />} />
+        <Route path='/doctor/:id/:date' element={<DoctorsView />} />
       </Routes>
     </Router>
   )
