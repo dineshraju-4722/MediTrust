@@ -4,6 +4,7 @@ import LoginPage from './components/commonComponents/LoginPage'
 import { UserHomePage } from './components/userComponents/UserHomePage'
 import { DoctersList } from './components/userComponents/DoctersList'
 import { DoctorsView } from './components/userComponents/DoctorsView'
+import AppointmentPage from './components/userComponents/AppointmentPage' 
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <Route path='/doctor/:id/:date' element={<DoctorsView />} />
         <Route path='/home' element={<UserHomePage />} />
         <Route path='/doctors/:specialist' element={<DoctersList />} />
+        <Route path='/booking/:date/:doctid/:userid/:time' element={<AppointmentPage />} />
       </Routes>
     </Router>
   )
