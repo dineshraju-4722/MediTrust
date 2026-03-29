@@ -7,6 +7,8 @@ import { DoctorsView } from './components/userComponents/DoctorsView'
 import AppointmentPage from './components/userComponents/AppointmentPage' 
 import HospitalView from './components/commonComponents/hospitalComponents/HospitalView'
 import HospitalsList from './components/commonComponents/hospitalComponents/HospitalsList'
+import DocterHomePage from './components/doctorComponents/DocterHomePage'
+import AdminPage from './components/doctorComponents/DoctorMainPage'
 
 function App() {
 
@@ -21,6 +23,8 @@ function App() {
 
         <Route path='/hospitals' element={<HospitalsList/>}/>
         <Route path='/hospital/:id' element={<HospitalView/>}/>
+        <Route path='/doctorControls/:doctid' element={<DocterHomePage />} />
+        <Route path='/doctorrole/:doctid' element={<AdminPage />} />
       </Routes>
     </Router>
   )

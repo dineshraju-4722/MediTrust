@@ -58,7 +58,7 @@ export const Navbar = () => {
 
 
 
-    return <section className="h-[13vh] w-[100vw] bg-white flex justify-between px-[3vw] items-center border border-b-gray-200">
+    return <section className="h-[13vh] w-[100vw] bg-white flex justify-between px-[3vw] items-center">
         
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwf079S6b6pl0JnwsBINexxt8Kef7ujz0CsVbqB0fGhxxQbcnJ1h_MauB1zyD8mlmSUQU&usqp=CAU" alt="Icon" className="w-[5rem] h-[13vh] bg-green-500" onClick={()=>navigate('/')}/>
         {
