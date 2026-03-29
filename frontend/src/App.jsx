@@ -5,6 +5,8 @@ import { UserHomePage } from './components/userComponents/UserHomePage'
 import { DoctersList } from './components/userComponents/DoctersList'
 import { DoctorsView } from './components/userComponents/DoctorsView'
 import AppointmentPage from './components/userComponents/AppointmentPage' 
+import HospitalView from './components/commonComponents/hospitalComponents/HospitalView'
+import HospitalsList from './components/commonComponents/hospitalComponents/HospitalsList'
 
 function App() {
 
@@ -16,6 +18,9 @@ function App() {
         <Route path='/home' element={<UserHomePage />} />
         <Route path='/doctors/:specialist' element={<DoctersList />} />
         <Route path='/booking/:date/:doctid/:userid/:time' element={<AppointmentPage />} />
+
+        <Route path='/hospitals' element={<HospitalsList/>}/>
+        <Route path='/hospital/:id' element={<HospitalView/>}/>
       </Routes>
     </Router>
   )
