@@ -51,7 +51,7 @@ VALUES
 -- Psychiatrist (Max Super Specialty)
 ('https://randomuser.me/api/portraits/men/21.jpg', 'Dr. Arvind Menon', 'arvind.menon@max.com', '9822001122', 'false', '15 years', 6, 6),
 ('https://randomuser.me/api/portraits/women/22.jpg', 'Dr. Shruti Pillai', 'shruti.pillai@max.com', '9811998877', 'false', '9 years', 6, 6),
-    @
+
 -- Dentist (Narayana Health)
     ('https://randomuser.me/api/portraits/men/23.jpg', 'Dr. Rajesh Nair', 'rajesh.nair@narayana.com', '9877009988', 'false', '10 years', 7, 7),
 ('https://randomuser.me/api/portraits/women/24.jpg', 'Dr. Neha Patil', 'neha.patil@narayana.com', '9866112233', 'false', '6 years', 7, 7),

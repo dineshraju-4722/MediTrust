@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS hospital (
                                         name VARCHAR(255) NOT NULL UNIQUE,
     location VARCHAR(255),
     email VARCHAR(255) not NULL unique,
-    contact VARCHAR(50),
-    CONSTRAINT unique_name_email UNIQUE (name, email)
+    contact VARCHAR(50)
+    ,CONSTRAINT unique_name_email UNIQUE (name, email)
     );
 
 CREATE TABLE IF NOT EXISTS doctor (
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS doctor (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE,
     contact VARCHAR(255),
-    status varchar(10) default 'false',
+    status varchar(10) default false,
     experience VARCHAR(255),
     specialization_id INTEGER NOT NULL,
     hospital_id INTEGER NOT NULL,
