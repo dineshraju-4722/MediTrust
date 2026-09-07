@@ -7,18 +7,19 @@ import { Button, Rate } from "antd";
 
 export const DoctersList = () => {
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const { specialist } = useParams();
     const [docters, setDocters] = useState([]);
 
     useEffect(() => {
         const func = async () => {
             const res = await getDoctersByType(specialist);
-            if(res){
-                const res1=res.filter(e => e.status=="true");
+            if (res) {
+                const res1 = res.filter(e => e.status == "false");
+                console.log(res1);
                 setDocters(res1);
             }
-            
+
         }
         func();
     }, [])
@@ -46,7 +47,7 @@ export const DoctersList = () => {
                                     <span className="mr-[0.5rem] text-xl"><i class="ri-police-badge-fill"></i></span>
                                     <span>{docter.experience} Years of experience</span>
                                 </section>
-                                <section className="mr-[1rem] hover:underline" onClick={()=>{navigate(`/hospital/${docter.hospital.id}`)}}>
+                                <section className="mr-[1rem] hover:underline" onClick={() => { navigate(`/hospital/${docter.hospital.id}`) }}>
                                     <span className="mr-[0.5rem] text-xl"><i class="ri-hospital-line"></i></span>
                                     <span >{docter.hospital.name}</span>
                                 </section>
@@ -54,13 +55,13 @@ export const DoctersList = () => {
                                     <span className="mr-[0.5rem] text-xl"><i class="ri-map-pin-line"></i></span>
                                     <span>{docter.hospital.location}</span>
                                 </section>
-                                
+
                             </article>
                             <section className="my-[1rem]">
-                                    <Rate value={docter.averageRating}  >Rating:</Rate>
-                                    <span className="ml-[0.5rem] ">{docter.averageRating}</span>
-                                </section>
-                            <Button className=" mt-[0.5rem] w-[35vw]" type="primary"   onClick={()=>{navigate(`/doctor/${docter.id}/${moment().format('YYYY-MM-DD')}`)}}>Book appointment</Button>
+                                <Rate value={docter.averageRating}  >Rating:</Rate>
+                                <span className="ml-[0.5rem] ">{docter.averageRating}</span>
+                            </section>
+                            <Button className=" mt-[0.5rem] w-[35vw]" type="primary" onClick={() => { navigate(`/doctor/${docter.id}/${moment().format('YYYY-MM-DD')}`) }}>Book appointment</Button>
                         </section>
                     </section>
                 })}

@@ -1,142 +1,125 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Form, Modal, Input, Button, Select, message } from "antd";
+import { Modal, message } from "antd";
 import { setUser } from "../../redux/UserRedux";
-import { loginData, signUpData } from "../../apiCalls/UserCalls";
 import { useNavigate } from "react-router-dom";
+import LoginCard from "./LoginCard";
+import { HeartPulse, LogOut, User as UserIcon, Shield, Stethoscope } from "lucide-react";
 
 export const Navbar = () => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const currentUser = useSelector((state) => state.user.currentUser);
-    const [signIn, setSignIn] = useState(false);
-    const [signUP, setSignUp] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
+  
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState("signin"); // "signin" or "signup"
 
+  function handleSignOut() {
+    dispatch(setUser(null));
+    localStorage.removeItem("user");
+    message.success("SignOut Successful");
+    navigate("/");
+  }
 
+  const openSignIn = () => {
+    setAuthMode("signin");
+    setAuthModalOpen(true);
+  };
 
-    async function handleFinishSignIn(data) {
-        try {
-            const res = await loginData(data);
-            if (res.name !== undefined) {
-                localStorage.setItem('user', JSON.stringify(res))
-                dispatch(setUser(res));
-                setSignIn(false);
-                message.success('LoggedIn Success')
-            }
-            if (res.role == 'user') {   navigate('/home') }
-            else if (res.role == 'doctor') {navigate(`/doctorControls/${res.id}`)}
-            else {navigate('/mainadminPage')  }
-            console.log(res.role)
-        }
-        catch (err) {
-            message.error("Check Details")
-        }
-    }
+  const openSignUp = () => {
+    setAuthMode("signup");
+    setAuthModalOpen(true);
+  };
 
-    async function handleFinishSignUp(data) {
-        try {
-            const res = await signUpData(data);
-            setSignUp(false)
-            setSignIn(true)
-            message.success('SignUp Successful')
-            message.info('redirected to signIn')
+  return (
+    <header className="w-full h-20 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-8 flex justify-between items-center z-50">
+      
+      {/* Brand Logo & Name */}
+      <div 
+        onClick={() => navigate('/')} 
+        className="flex items-center gap-3 cursor-pointer group"
+      >
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:scale-105 transition-transform duration-200">
+          <HeartPulse className="w-6 h-6 text-slate-950" />
+        </div>
+        <div>
+          <span className="text-xl font-black tracking-tight text-white flex items-center gap-1">
+            Medi<span className="text-teal-400">Trust</span>
+          </span>
+          <span className="text-[10px] text-slate-400 font-medium block -mt-1 tracking-wider uppercase">
+            Healthcare Network
+          </span>
+        </div>
+      </div>
 
-        }
-        catch (err) {
-            message.error("User Already Exists")
-        }
+      {/* Navigation & Auth Section */}
+      <div className="flex items-center gap-4">
+        {currentUser ? (
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => {
+                if (currentUser.role === 'doctor') {
+                  navigate(`/doctorControls/${currentUser.id}`);
+                } else if (currentUser.role === 'admin') {
+                  navigate(`/doctorrole/${currentUser.id}`);
+                } else {
+                  navigate('/home');
+                }
+              }}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-200 text-xs sm:text-sm font-semibold border border-slate-700/60 transition-colors"
+            >
+              {currentUser.role === 'doctor' ? (
+                <Stethoscope className="w-4 h-4 text-teal-400" />
+              ) : (
+                <UserIcon className="w-4 h-4 text-teal-400" />
+              )}
+              <span>Hello, {currentUser.name || 'User'}</span>
+            </button>
 
-    }
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs sm:text-sm font-semibold border border-rose-500/20 transition-colors cursor-pointer"
+            >
+              <LogOut className="w-4 h-4" />
+              <span className="hidden sm:inline">Sign Out</span>
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={openSignIn}
+              className="px-4 py-2 text-xs sm:text-sm font-semibold text-slate-200 hover:text-white transition-colors cursor-pointer"
+            >
+              Sign In
+            </button>
+            
+            <button
+              onClick={openSignUp}
+              className="px-4 py-2.5 text-xs sm:text-sm font-bold bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-slate-950 rounded-xl shadow-lg shadow-teal-500/20 transition-all duration-200 active:scale-[0.98] cursor-pointer"
+            >
+              Get Started
+            </button>
+          </div>
+        )}
+      </div>
 
-    function removeuser() {
-        dispatch(setUser(null));
-        localStorage.removeItem('user');
-        message.success('SignOut Successful')
-        navigate('/')
-    }
-
-
-
-
-    return <section className="h-[13vh] w-[100vw] bg-white flex justify-between px-[3vw] items-center">
-        
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwf079S6b6pl0JnwsBINexxt8Kef7ujz0CsVbqB0fGhxxQbcnJ1h_MauB1zyD8mlmSUQU&usqp=CAU" alt="Icon" className="w-[5rem] h-[13vh] bg-green-500" onClick={()=>navigate('/')}/>
-        {
-            !currentUser?.name ?
-
-                <button className='p-[0.3rem] bg-blue-500 rounded-md w-[7rem] h-[8vh]' onClick={() => { setSignIn(true) }}>SignIn</button> :
-                <section className="flex gap-[1rem]"> <p className="underline font-bold" onClick={() => { navigate('/mainadminPage') }}>Hello , {currentUser.name}</p>
-                    <Button onClick={() => { removeuser() }}>logout</Button>
-                </section>
-
-        }
-
-        <Modal title="Sign Up"
-            open={signUP}
-            onCancel={() => setSignUp(false)}
-            footer={null}
-            centered>
-            <Form
-                layout="vertical"
-                onFinish={handleFinishSignUp}>
-
-                <Form.Item label="Name" name="name" rules={[{ required: true }]}>
-                    <Input placeholder="Enter your name" type="text" />
-                </Form.Item>
-
-                <Form.Item label="Email" name="email" rules={[{ required: true }]}
-                >
-                    <Input placeholder="Enter your email" />
-                </Form.Item>
-
-                <Form.Item
-                    label="Password"
-                    name="password" rules={[{ required: true }]}
-                >
-                    <Input.Password placeholder="Enter your password" />
-                </Form.Item>
-
-                <Form.Item label="I am a" name="role" rules={[{ required: true, message: "Select One" }]}>
-                    <Select placeholder="Select Role">
-                        <Option value="user">user</Option>
-                        <Option value="doctor">Doctor</Option>
-                    </Select>
-                </Form.Item>
-
-                <Button type="primary" htmlType="submit" >
-                    Sign Up
-                </Button>
-
-                <p> Already Have Account? <span onClick={() => { setSignUp(false); setSignIn(true) }}> Sign In</span></p>
-            </Form>
-        </Modal>
-
-        <Modal title="Sign In"
-            open={signIn}
-            onCancel={() => setSignIn(false)}
-            footer={null}>
-            <Form
-                layout="vertical"
-                onFinish={handleFinishSignIn}>
-                <Form.Item label="Email" name="email"
-                >
-                    <Input placeholder="Enter your email" />
-                </Form.Item>
-
-                <Form.Item
-                    label="Password"
-                    name="password"
-                >
-                    <Input.Password placeholder="Enter your password" />
-                </Form.Item>
-
-                <Button type="primary" htmlType="submit" >
-                    Sign In
-                </Button>
-                <p>New User ? <span onClick={() => { setSignIn(false); setSignUp(true) }}>Create Account</span></p>
-            </Form>
-        </Modal>
-
-    </section>
-
-}
+      {/* Auth Modal wrapping the LoginCard */}
+      <Modal
+        open={authModalOpen}
+        onCancel={() => setAuthModalOpen(false)}
+        footer={null}
+        centered
+        width={460}
+        styles={{ body: { padding: 0 } }}
+        modalRender={(modalContent) => (
+          <div className="p-0 bg-transparent shadow-none border-none">
+            <LoginCard 
+              initialMode={authMode} 
+              onSuccessModalClose={() => setAuthModalOpen(false)} 
+            />
+          </div>
+        )}
+      />
+    </header>
+  );
+};
