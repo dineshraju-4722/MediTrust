@@ -1,112 +1,108 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar } from "../Navbar";
 import { getSpecialistsNames } from "../../../apiCalls/UserCalls";
 import { GetHospitalById } from "../../../apiCalls/HospitalCalls";
 import { useNavigate, useParams } from "react-router-dom";
-import moment from "moment";
 import HospitalViewDoctors from "./HospitalViewDoctors";
+import { Building2, MapPin, Stethoscope, ArrowLeft, ShieldCheck } from "lucide-react";
 
 export default function HospitalView() {
-    const [hospital, setHospital] = useState({});
-    const [specializations, setSpecializations] = useState([]);
-    const [doctors, setDoctors] = useState([]);
+  const [hospital, setHospital] = useState({});
+  const [specializations, setSpecializations] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    const { id } = useParams();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  useEffect(() => {
+    async function func() {
+      setLoading(true);
+      try {
+        const spec = await getSpecialistsNames();
+        if (Array.isArray(spec)) setSpecializations(spec);
 
-
-
-
-    useEffect(() => {
-        async function func() {
-            const spec = await getSpecialistsNames();
-            setSpecializations(spec);
-
-            const hosp = await GetHospitalById(id);
-            setHospital(hosp);
-
-            setDoctors(hosp.docters)
+        const hosp = await GetHospitalById(id);
+        if (hosp) {
+          setHospital(hosp);
+          if (Array.isArray(hosp.docters)) setDoctors(hosp.docters);
         }
+      } catch (err) {
+        console.error("Error fetching hospital details:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    func();
+  }, [id]);
 
-        func();
-    }, [])
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans relative overflow-x-hidden">
+      <Navbar />
 
-    return <>
-        <Navbar />
+      {/* Ambient Lights */}
+      <div className="absolute top-20 right-1/4 w-[500px] h-[500px] bg-teal-500/10 rounded-full blur-[140px] pointer-events-none" />
 
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 z-10">
+        
+        {/* Back link */}
+        <div>
+          <button
+            onClick={() => navigate("/hospitals")}
+            className="inline-flex items-center gap-1.5 text-xs text-teal-400 hover:text-teal-300 font-semibold cursor-pointer transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Back to Hospitals Directory
+          </button>
+        </div>
 
-        {hospital.name != '' && <> <section className="w-[100vw]  px-[4vw] py-[3vw] flex justify-between  docterpage">
-            <section className="flex flex-col  rounded-md bg-white p-[2vw] doctertabs"  >
-                <section className=" flex items-center mb-[2rem] gap-[4vw] img-handling">
-                    <img src="#" className="h-[8rem] w-[8rem] bg-green-500 rounded-[50%] " />
-                    <section className="flex flex-col justify-between h-[6rem]">
-                        <p className="text-2xl font-bold ">{hospital.name}</p>
-                        <section className="flex text-sky-500 ">
-                            <span className="text-xl"><i class="ri-stethoscope-fill"></i> </span>
-                        </section>
-                        <section>
-                            <span className="mr-[1rem] "><i class="ri-police-badge-fill"></i></span>
-                            <span>{hospital.location} </span>
-                        </section>
-                        <span>{hospital.location} </span>
-                    </section>
-                </section>
-                {/* <section className="flex flex-col gap-[1rem]">
+        {hospital.name ? (
+          <div className="space-y-8">
+            
+            {/* Hospital Header Hero */}
+            <div className="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800/80 backdrop-blur-xl shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+              <div className="flex items-center gap-5">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-teal-500/10 border border-teal-500/30 text-teal-400 flex items-center justify-center shrink-0 shadow-lg">
+                  <Building2 className="w-9 h-9" />
+                </div>
+                
+                <div className="space-y-1.5">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/20 text-[11px] font-semibold">
+                    <ShieldCheck className="w-3 h-3 text-teal-400" />
+                    <span>Affiliated Hospital Partner</span>
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl font-black text-white">{hospital.name}</h1>
+                  <div className="flex items-center gap-2 text-xs text-slate-400">
+                    <MapPin className="w-3.5 h-3.5 text-rose-400" />
+                    <span>{hospital.location}</span>
+                  </div>
+                </div>
+              </div>
 
-                    <section className="flex text-sm">
-                        <Rate value={docter.averageRating} disabled></Rate>
-                        <span className="ml-[1rem]">({docter.averageRating})</span>
-                    </section>
-                    <section className="mr-[1rem] hover:underline" onClick={() => { navigate(`/hospital/${docter.hospital.id}`) }}>
-                        <span className="text-xl mr-[1rem] "><i class="ri-hospital-line"></i></span>
-                        <span>{docter.hospital.name}</span>
-                    </section>
+              <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-slate-950/80 border border-slate-800 shrink-0">
+                <Stethoscope className="w-6 h-6 text-teal-400" />
+                <div>
+                  <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Medical Staff</div>
+                  <div className="text-xl font-bold text-white">{doctors.length} Doctors</div>
+                </div>
+              </div>
+            </div>
 
-                    <section>
-                        <span className="text-xl mr-[1rem]"><i class="ri-map-pin-line"></i></span>
-                        <span>{docter.hospital.location}</span>
-                    </section>
+            {/* Doctors & Specializations Filter Section */}
+            <HospitalViewDoctors specializations={specializations} doctors={doctors} />
 
+          </div>
+        ) : (
+          <div className="text-center py-16 text-slate-400 space-y-3">
+            <div className="w-8 h-8 border-2 border-teal-400 border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-sm">Loading hospital details...</p>
+          </div>
+        )}
+      </main>
 
-                    <section className="flex flex-wrap">
-                        <article className="mr-[1rem]">
-                            <span className="text-xl mr-[1rem] "><i class="ri-phone-fill"></i></span>
-                            <span>{docter.contact}</span>
-                        </article>
-                        <article className="flex flex-wrap">
-                            <span className="text-xl mr-[1rem]"><i class="ri-mail-line"></i></span>
-                            <span>{docter.email}</span>
-                        </article>
-                    </section>
-
-                    <hr></hr>
-                    <section>
-                        {docter.userRating == 0 ? <p>Give Rating</p> : <p>Your Rating</p>}
-                        <Rate value={rating || docter.rating} onChange={setRating}></Rate>
-                        <Button className="ml-[1rem]" onClick={() => { currentUser != null ? postreview(rating, currentUser.id, docter.id) : message.info('login To give Rating to a doctor') }}>Post review</Button>
-                    </section>
-
-
-                </section> */}
-            </section>
-        </section>
-         <HospitalViewDoctors specializations={specializations} doctors={doctors} />
-         </>
-        }
-
-
-
-
-        {/* 
-        {
-            // console.log(specializations)
-            console.log(hospital)
-            // console.log(doctors)
-        } */}
-
-
-
-
-    </>
+      <footer className="w-full py-6 text-center text-xs text-slate-500 border-t border-slate-900 mt-12 z-10">
+        © {new Date().getFullYear()} MediTrust Health Platform. All rights reserved.
+      </footer>
+    </div>
+  );
 }
