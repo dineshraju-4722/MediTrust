@@ -1,8 +1,7 @@
 package com.meditrust.backend.Entities;
 
-
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,6 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SpecializationEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -30,7 +30,6 @@ public class SpecializationEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    //	    @JsonIgnore
     @OneToMany(mappedBy = "specialization", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<DocterEntity> docters = new ArrayList<>();
 }

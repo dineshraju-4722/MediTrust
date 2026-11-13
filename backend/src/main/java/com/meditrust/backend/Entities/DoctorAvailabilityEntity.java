@@ -1,6 +1,5 @@
 package com.meditrust.backend.Entities;
 
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -17,13 +16,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
-@Table(name="doctor_availability")
+@Table(name = "doctor_availability")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DoctorAvailabilityEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -31,11 +30,12 @@ public class DoctorAvailabilityEntity {
     private LocalDate date;
 
     @Column(nullable = false)
-    private LocalTime startTime;         // e.g. 09:00
+    private LocalTime startTime;
+
     @Column(nullable = false)
     private LocalTime endTime;
 
-    private int maxAppointments;   // e.g., 10 slots available for that day
+    private int maxAppointments;
     private int bookedAppointments = 0;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -45,5 +45,4 @@ public class DoctorAvailabilityEntity {
     public boolean isAvailable() {
         return bookedAppointments < maxAppointments;
     }
-
 }

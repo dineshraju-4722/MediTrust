@@ -1,1 +1,24 @@
-.idea
+# IDE & Environment
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local tooling & workspace configs
+.agent/
+.agents/
+.gemini/
+.impeccable/
+skills-lock.json
+PRODUCT.md
+DESIGN.md
+
+# Dependencies & Build artifacts
+**/node_modules/
+**/dist/
+**/dist-ssr/
+**/build/
+.gradle/
+bin/
+out/
+*.log

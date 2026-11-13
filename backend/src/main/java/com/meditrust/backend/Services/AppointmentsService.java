@@ -13,11 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-
 @Service
 public class AppointmentsService {
-
 
     @Autowired
     private AppointmentsRepository apprepo;
@@ -36,7 +33,6 @@ public class AppointmentsService {
 
     public AppointmentEntity getById(int id) {
         return apprepo.findById(id).orElse(null);
-
     }
 
     public List<GetAppointmentsByUserDto> getByUserId(int id) {
@@ -52,26 +48,19 @@ public class AppointmentsService {
             dto.setSpecializationName(a.getDoctor().getSpecialization().getName());
             return dto;
         }).toList();
-
     }
 
     public int postAppointment(AppointmentPostDto body) {
-        // TODO Auto-generated method stub
-        AppointmentPostDto abc=body;
-
-
-
-        AppointmentEntity map = modelmapper.map(body,AppointmentEntity.class);
+        AppointmentEntity map = modelmapper.map(body, AppointmentEntity.class);
         map.setDoctor(drepo.findById(body.getDocter()).orElse(null));
         map.setUser(userrepo.findById(body.getUser()).orElse(null));
         apprepo.save(map);
 
-        GetDocterAvailabilityDto bydateAndTime = daserv.getBydateAndTime(abc.getAppointmentDate(), abc.getDocter(), abc.getAppointmentTime());
+        GetDocterAvailabilityDto bydateAndTime = daserv.getBydateAndTime(
+            body.getAppointmentDate(),
+            body.getDocter(),
+            body.getAppointmentTime()
+        );
         return bydateAndTime.getId();
-
     }
-
-
-
 }
-

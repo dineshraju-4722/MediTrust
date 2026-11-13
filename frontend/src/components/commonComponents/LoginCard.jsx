@@ -12,15 +12,14 @@ import {
   ArrowRight, 
   Loader2, 
   AlertCircle, 
-  CheckCircle2,
-  Sparkles
+  CheckCircle2
 } from "lucide-react";
 import { setUser } from "../../redux/UserRedux";
 import { loginData, signUpData } from "../../apiCalls/UserCalls";
 
 export default function LoginCard({ initialMode = "signin", onSuccessModalClose }) {
   const [isSignIn, setIsSignIn] = useState(initialMode === "signin");
-  const [role, setRole] = useState("user"); // 'user' or 'doctor'
+  const [role, setRole] = useState("user");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -43,9 +42,9 @@ export default function LoginCard({ initialMode = "signin", onSuccessModalClose 
     if (errorMsg) setErrorMsg("");
   };
 
-  const handleQuickFill = (selectedRole) => {
-    setRole(selectedRole);
-    if (selectedRole === "doctor") {
+  const fillQuickCredentials = (targetRole) => {
+    setRole(targetRole);
+    if (targetRole === "doctor") {
       setFormData({
         name: "Dr. Sarah Jenkins",
         email: "doctor@meditrust.com",
@@ -79,7 +78,6 @@ export default function LoginCard({ initialMode = "signin", onSuccessModalClose 
 
     try {
       if (isSignIn) {
-        // Sign In Flow
         const res = await loginData({
           email: formData.email,
           password: formData.password,
@@ -88,8 +86,8 @@ export default function LoginCard({ initialMode = "signin", onSuccessModalClose 
         if (res && (res.name || res.id || res.email)) {
           localStorage.setItem("user", JSON.stringify(res));
           dispatch(setUser(res));
-          setSuccessMsg("Logged in successfully! Redirecting...");
-          
+          setSuccessMsg("Signed in successfully.");
+
           if (onSuccessModalClose) {
             onSuccessModalClose();
           }
@@ -102,33 +100,31 @@ export default function LoginCard({ initialMode = "signin", onSuccessModalClose 
             } else {
               navigate("/home");
             }
-          }, 800);
+          }, 600);
         } else {
-          setErrorMsg("Invalid credentials. Please check your details.");
+          setErrorMsg("Invalid credentials. Please verify your email and password.");
         }
       } else {
-        // Sign Up Flow
         const payload = {
           name: formData.name,
           email: formData.email,
           password: formData.password,
           role: role,
         };
-        const res = await signUpData(payload);
-        
-        setSuccessMsg("Account created successfully! Switching to Sign In...");
+        await signUpData(payload);
+
+        setSuccessMsg("Account created successfully. You can now sign in.");
         setTimeout(() => {
           setIsSignIn(true);
           setSuccessMsg("");
           setFormData((prev) => ({ ...prev, password: "" }));
-        }, 1500);
+        }, 1200);
       }
     } catch (err) {
-      console.error(err);
       if (!isSignIn) {
-        setErrorMsg(err.response?.data?.message || "User already exists or registration failed.");
+        setErrorMsg(err.response?.data?.message || "Registration failed. Email may already be registered.");
       } else {
-        setErrorMsg(err.response?.data?.message || "Invalid email or password.");
+        setErrorMsg(err.response?.data?.message || "Invalid credentials.");
       }
     } finally {
       setLoading(false);
@@ -136,32 +132,23 @@ export default function LoginCard({ initialMode = "signin", onSuccessModalClose 
   };
 
   return (
-    <div className="w-full max-w-md bg-white/90 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-2xl p-6 sm:p-8 transition-all duration-300 relative overflow-hidden">
-      {/* Top Accent Gradient Bar */}
-      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-teal-500 via-emerald-500 to-cyan-600" />
-
-      {/* Background Decorative Glow */}
-      <div className="absolute -top-24 -right-24 w-48 h-48 bg-teal-400/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Header & Tab Switcher */}
-      <div className="mb-6 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-semibold mb-3 border border-teal-200/60">
-          <ShieldCheck className="w-3.5 h-3.5 text-teal-600" />
-          <span>Secure MediTrust Authentication</span>
+    <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8">
+      <div className="mb-6">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-teal-500/10 text-teal-400 text-xs font-semibold mb-3">
+          <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
+          <span>MediTrust Account Access</span>
         </div>
-        <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">
-          {isSignIn ? "Welcome Back" : "Create an Account"}
+        <h2 className="text-2xl font-bold text-white tracking-tight">
+          {isSignIn ? "Sign In" : "Create Account"}
         </h2>
-        <p className="text-sm text-slate-500 mt-1">
+        <p className="text-xs text-slate-400 mt-1">
           {isSignIn
-            ? "Access your personalized healthcare portal"
-            : "Join MediTrust for smart appointments & health management"}
+            ? "Enter your credentials to access your appointments and care records."
+            : "Sign up to schedule appointments with specialists."}
         </p>
       </div>
 
-      {/* Sign In / Sign Up Mode Toggle */}
-      <div className="grid grid-cols-2 p-1 bg-slate-100/90 rounded-2xl mb-6">
+      <div className="grid grid-cols-2 p-1 bg-slate-950 rounded-xl mb-5 border border-slate-800/80">
         <button
           type="button"
           onClick={() => {
@@ -169,10 +156,10 @@ export default function LoginCard({ initialMode = "signin", onSuccessModalClose 
             setErrorMsg("");
             setSuccessMsg("");
           }}
-          className={`py-2.5 text-xs sm:text-sm font-semibold rounded-xl transition-all duration-200 ${
+          className={`py-2 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
             isSignIn
-              ? "bg-white text-teal-700 shadow-md shadow-teal-900/5"
-              : "text-slate-500 hover:text-slate-800"
+              ? "bg-slate-800 text-white shadow-sm"
+              : "text-slate-400 hover:text-slate-200"
           }`}
         >
           Sign In
@@ -184,87 +171,69 @@ export default function LoginCard({ initialMode = "signin", onSuccessModalClose 
             setErrorMsg("");
             setSuccessMsg("");
           }}
-          className={`py-2.5 text-xs sm:text-sm font-semibold rounded-xl transition-all duration-200 ${
+          className={`py-2 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
             !isSignIn
-              ? "bg-white text-teal-700 shadow-md shadow-teal-900/5"
-              : "text-slate-500 hover:text-slate-800"
+              ? "bg-slate-800 text-white shadow-sm"
+              : "text-slate-400 hover:text-slate-200"
           }`}
         >
           Register
         </button>
       </div>
 
-      {/* Notification Alerts */}
       {errorMsg && (
-        <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs sm:text-sm flex items-start gap-2 animate-fadeIn">
-          <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+        <div className="mb-4 p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
           <span>{errorMsg}</span>
         </div>
       )}
 
       {successMsg && (
-        <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs sm:text-sm flex items-start gap-2 animate-fadeIn">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+        <div className="mb-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-start gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
           <span>{successMsg}</span>
         </div>
       )}
 
-      {/* Form Content */}
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Role Selector (visible during Sign Up) */}
         {!isSignIn && (
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
-              I am joining as:
-            </label>
-            <div className="grid grid-cols-2 gap-3">
+            <label className="block text-xs font-medium text-slate-400">Account Type</label>
+            <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => setRole("user")}
-                className={`p-3 rounded-xl border flex items-center gap-2.5 transition-all text-left ${
+                className={`p-2.5 rounded-lg border text-left flex items-center gap-2 cursor-pointer transition-colors ${
                   role === "user"
-                    ? "border-teal-500 bg-teal-50/60 text-teal-900 ring-2 ring-teal-500/20 font-semibold"
-                    : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                    ? "border-teal-500 bg-teal-500/10 text-white"
+                    : "border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700"
                 }`}
               >
-                <div className={`p-1.5 rounded-lg ${role === "user" ? "bg-teal-500 text-white" : "bg-slate-100 text-slate-500"}`}>
-                  <User className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold">Patient</div>
-                  <div className="text-[10px] text-slate-500">Book Care</div>
-                </div>
+                <User className="w-4 h-4 text-teal-400" />
+                <span className="text-xs font-semibold">Patient</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setRole("doctor")}
-                className={`p-3 rounded-xl border flex items-center gap-2.5 transition-all text-left ${
+                className={`p-2.5 rounded-lg border text-left flex items-center gap-2 cursor-pointer transition-colors ${
                   role === "doctor"
-                    ? "border-teal-500 bg-teal-50/60 text-teal-900 ring-2 ring-teal-500/20 font-semibold"
-                    : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                    ? "border-teal-500 bg-teal-500/10 text-white"
+                    : "border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700"
                 }`}
               >
-                <div className={`p-1.5 rounded-lg ${role === "doctor" ? "bg-teal-500 text-white" : "bg-slate-100 text-slate-500"}`}>
-                  <Stethoscope className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold">Doctor</div>
-                  <div className="text-[10px] text-slate-500">Manage Practice</div>
-                </div>
+                <Stethoscope className="w-4 h-4 text-teal-400" />
+                <span className="text-xs font-semibold">Doctor</span>
               </button>
             </div>
           </div>
         )}
 
-        {/* Full Name Input (Sign Up Only) */}
         {!isSignIn && (
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">
-              Full Name
-            </label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">Full Name</label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                 <User className="w-4 h-4" />
               </div>
               <input
@@ -272,21 +241,18 @@ export default function LoginCard({ initialMode = "signin", onSuccessModalClose 
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                placeholder="Dr. John Smith / Jane Doe"
-                className="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50/80 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 text-slate-800 transition-all placeholder:text-slate-400"
+                placeholder="Full name"
+                className="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
                 required={!isSignIn}
               />
             </div>
           </div>
         )}
 
-        {/* Email Input */}
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">
-            Email Address
-          </label>
+          <label className="block text-xs font-medium text-slate-400 mb-1">Email Address</label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
               <Mail className="w-4 h-4" />
             </div>
             <input
@@ -294,20 +260,17 @@ export default function LoginCard({ initialMode = "signin", onSuccessModalClose 
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              placeholder="you@example.com"
-              className="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50/80 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 text-slate-800 transition-all placeholder:text-slate-400"
+              placeholder="name@example.com"
+              className="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
               required
             />
           </div>
         </div>
 
-        {/* Password Input */}
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">
-            Password
-          </label>
+          <label className="block text-xs font-medium text-slate-400 mb-1">Password</label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
               <Lock className="w-4 h-4" />
             </div>
             <input
@@ -316,73 +279,58 @@ export default function LoginCard({ initialMode = "signin", onSuccessModalClose 
               value={formData.password}
               onChange={handleInputChange}
               placeholder="••••••••"
-              className="w-full pl-10 pr-11 py-2.5 text-sm bg-slate-50/80 border border-slate-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 text-slate-800 transition-all placeholder:text-slate-400"
+              className="w-full pl-9 pr-10 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
               required
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300"
             >
-              {showPassword ? (
-                <EyeOff className="w-4 h-4" />
-              ) : (
-                <Eye className="w-4 h-4" />
-              )}
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-2 py-3 px-4 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-semibold text-sm rounded-xl shadow-lg shadow-teal-600/25 flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+          className="w-full py-2.5 px-4 bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-sm rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
         >
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Processing...</span>
+              <span>Please wait...</span>
             </>
           ) : (
             <>
-              <span>{isSignIn ? "Sign In to MediTrust" : "Create Account"}</span>
+              <span>{isSignIn ? "Sign In" : "Create Account"}</span>
               <ArrowRight className="w-4 h-4" />
             </>
           )}
         </button>
       </form>
 
-      {/* Quick Fill Demo Helpers */}
-      <div className="mt-6 pt-5 border-t border-slate-100">
-        <div className="flex items-center justify-between text-[11px] text-slate-400 mb-2">
-          <span className="flex items-center gap-1 font-medium text-slate-500">
-            <Sparkles className="w-3 h-3 text-amber-500" />
-            Quick Demo Fill:
-          </span>
-        </div>
+      <div className="mt-5 pt-4 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+        <span>Test accounts:</span>
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={() => handleQuickFill("user")}
-            className="flex-1 py-1.5 px-2 bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-600 text-xs rounded-lg transition-all text-center border border-slate-200/60 font-medium"
+            onClick={() => fillQuickCredentials("user")}
+            className="text-teal-400 hover:underline cursor-pointer"
           >
-            Fill Patient Demo
+            Patient demo
           </button>
+          <span className="text-slate-600">|</span>
           <button
             type="button"
-            onClick={() => handleQuickFill("doctor")}
-            className="flex-1 py-1.5 px-2 bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-600 text-xs rounded-lg transition-all text-center border border-slate-200/60 font-medium"
+            onClick={() => fillQuickCredentials("doctor")}
+            className="text-teal-400 hover:underline cursor-pointer"
           >
-            Fill Doctor Demo
+            Doctor demo
           </button>
         </div>
       </div>
-
-      {/* Footer message */}
-      <p className="text-center text-xs text-slate-400 mt-5">
-        By continuing, you agree to MediTrust’s Terms of Care & Privacy Policy.
-      </p>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 package com.meditrust.backend.Controllers;
 
-
 import java.util.List;
 
 import com.meditrust.backend.Dto.GetHospitalsDto;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @CrossOrigin("*")
 public class HospitalController {
@@ -24,19 +22,17 @@ public class HospitalController {
     private HospitalService hserv;
 
     @GetMapping("/getHospital/{id}")
-    public ResponseEntity<GetHospitalsDto> gettingById(@PathVariable("id") int id) {
+    public ResponseEntity<GetHospitalsDto> getHospitalById(@PathVariable("id") int id) {
         return ResponseEntity.ok(hserv.getById(id));
     }
 
     @GetMapping("/getAllHospitals")
-    public ResponseEntity<List<GetHospitalsDto>> gettingAll() {
+    public ResponseEntity<List<GetHospitalsDto>> getAllHospitals() {
         return ResponseEntity.ok(hserv.getAllHosp());
     }
 
     @PostMapping("/postHospital")
-    public HospitalEntity postById(@RequestBody HospitalEntity body) {
+    public HospitalEntity postHospital(@RequestBody HospitalEntity body) {
         return hserv.postHospital(body);
     }
-
 }
-

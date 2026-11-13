@@ -1,48 +1,44 @@
 import api from "./axios";
 
-export const getDocter=async (id)=>{
-   const abc=await api.get(`/getDoctor/${id}`);
-   console.log(abc.data);
-   return abc.data;
-}
-export const getAllDocters=async ()=>{
-   const abc=await api.get(`getAllDoctors`);
-   console.log(abc.data);
-   return abc.data;
-}
+export const getDocter = async (id) => {
+  const response = await api.get(`/getDoctor/${id}`);
+  return response.data;
+};
 
-export const getDocterByEmail=async (name)=>{
-   const abc=await api.get(`/getDoctorByMail/${name}`);
-   console.log(abc.data);
-   return abc.data;
-}
+export const getAllDocters = async () => {
+  const response = await api.get(`/getAllDoctors`);
+  return response.data;
+};
 
-export const getAppoinByDateAndDoctor=async (id,date)=>{
-    const abc=await api.get(`/getDoctorAvailability/${id}/${date}`);
-    console.log(abc.data);
-   return abc.data;
-}
+export const getDocterByEmail = async (email) => {
+  const response = await api.get(`/getDoctorByMail/${email}`);
+  return response.data;
+};
 
-export const getDoctersByType=async (specialization)=>{
-   const abc=await api.get(`/getSpecializationByName/${specialization}`);
-   console.log(abc.data);
-   return abc.data;
-}
+export const getAppoinByDateAndDoctor = async (id, date) => {
+  const response = await api.get(`/getDoctorAvailability/${id}/${date}`);
+  return response.data;
+};
 
-export const postreviewcall=async (payload)=>{
-   try{const abc=await api.post('/postRating',payload);}
-   catch(err){return false;}
-   
-   return true;
-}
+export const getDoctersByType = async (specialization) => {
+  const response = await api.get(`/getSpecializationByName/${specialization}`);
+  return response.data;
+};
 
-export const setDoctersTrue=async (body)=>{
-   try{const abc=await api.post('/acceptStatus',body);}
-   catch(err){return false;}
-   
-   return true;
-}
+export const postreviewcall = async (payload) => {
+  try {
+    await api.post("/postRating", payload);
+    return true;
+  } catch {
+    return false;
+  }
+};
 
-
-
- 
+export const setDoctersTrue = async (body) => {
+  try {
+    await api.post("/acceptStatus", body);
+    return true;
+  } catch {
+    return false;
+  }
+};

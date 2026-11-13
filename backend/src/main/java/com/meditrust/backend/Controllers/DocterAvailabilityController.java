@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @CrossOrigin("*")
 public class DocterAvailabilityController {
@@ -25,12 +24,14 @@ public class DocterAvailabilityController {
     private DocterAvailabilityService daserv;
 
     @GetMapping("/getDoctorAvailability/{id}/{date}")
-    public ResponseEntity<List<GetDocterAvailabilityDto>> gettingById(@PathVariable("date") LocalDate date, @PathVariable("id") int id) {
-        return ResponseEntity.ok(daserv.getBydate(date,id));
+    public ResponseEntity<List<GetDocterAvailabilityDto>> getDoctorAvailability(
+            @PathVariable("date") LocalDate date,
+            @PathVariable("id") int id) {
+        return ResponseEntity.ok(daserv.getBydate(date, id));
     }
 
     @PostMapping("/postDoctorAvailability")
-    public void gettingById(@RequestBody PostDocterAvailabilityDto body) {
+    public void postDoctorAvailability(@RequestBody PostDocterAvailabilityDto body) {
         daserv.postDoctorAvailabliity(body);
     }
 
@@ -38,7 +39,4 @@ public class DocterAvailabilityController {
     public void updateCount(@PathVariable("id") int id) {
         daserv.update(id);
     }
-
-
-
 }

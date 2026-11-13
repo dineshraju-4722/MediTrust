@@ -1,6 +1,5 @@
 package com.meditrust.backend.Controllers;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 @RestController
 @CrossOrigin("*")
 public class AppointmentsController {
@@ -27,20 +24,18 @@ public class AppointmentsController {
     private AppointmentsService appserv;
 
     @GetMapping("/getAppointment/{id}")
-    public ResponseEntity<AppointmentEntity> gettingById(@PathVariable("id") int id) {
+    public ResponseEntity<AppointmentEntity> getAppointmentById(@PathVariable("id") int id) {
         return ResponseEntity.ok(appserv.getById(id));
     }
 
     @GetMapping("/getAppointmentsByUsers/{id}")
-    public ResponseEntity<List<GetAppointmentsByUserDto>> gettingByUserId(@PathVariable("id") int id) {
+    public ResponseEntity<List<GetAppointmentsByUserDto>> getAppointmentsByUserId(@PathVariable("id") int id) {
         return ResponseEntity.ok(appserv.getByUserId(id));
     }
 
-
     @PostMapping("/postAppointment")
-    public Map<String,Integer> postById(@RequestBody AppointmentPostDto body) {
-        int id= appserv.postAppointment(body);
-        return Map.of("id",id);
+    public Map<String, Integer> createAppointment(@RequestBody AppointmentPostDto body) {
+        int id = appserv.postAppointment(body);
+        return Map.of("id", id);
     }
-
 }

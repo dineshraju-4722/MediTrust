@@ -1,6 +1,6 @@
 import api from "./axios";
-export const PostDocterDetails=async (payload)=>{
-    const abc=await api.post(`/postDoctor`,payload);
-    console.log(abc.data);
-   return abc.data;
-}
+
+export const PostDocterDetails = async (payload) => {
+  const response = await api.post(`/postDoctor`, payload);
+  return response.data;
+};

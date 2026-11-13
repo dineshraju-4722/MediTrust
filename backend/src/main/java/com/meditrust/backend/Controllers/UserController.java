@@ -11,22 +11,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 @RestController
 @CrossOrigin("*")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
-    // ✅ Sign Up
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> registerUser(@RequestBody SignUpDto request) {
         UserResponseDto user = userService.registerUser(request);
         return ResponseEntity.ok(user);
     }
 
-    // ✅ Sign In
     @PostMapping("/signin")
     public ResponseEntity<UserResponseDto> loginUser(@RequestBody LoginDto request) {
         UserResponseDto user = userService.loginUser(request);

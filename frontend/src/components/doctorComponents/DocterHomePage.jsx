@@ -9,10 +9,6 @@ import { useSelector } from "react-redux";
 import { Navbar } from "../commonComponents/Navbar";
 import { 
   Stethoscope, 
-  Building2, 
-  Award, 
-  Phone, 
-  Mail, 
   CheckCircle2, 
   Clock, 
   ShieldCheck, 
@@ -34,11 +30,11 @@ export default function DocterHomePage() {
   async function DoctorPostRegister(data) {
     try {
       await PostDocterDetails(data);
-      message.success("Application submitted successfully!");
+      message.success("Doctor profile submitted for review.");
       setRegister(false);
     } catch (err) {
       console.error(err);
-      message.error("Registration failed. Please check form inputs.");
+      message.error("Registration request failed. Please check your inputs.");
     }
   }
 
@@ -52,10 +48,7 @@ export default function DocterHomePage() {
             setDocter(res);
             setRequest(true);
             if (res.status === "true") {
-              message.success("Logged in as Doctor");
               navigate(`/doctorrole/${res.id}`);
-            } else if (res.status === "false") {
-              message.info("Doctor application pending approval.");
             }
           } else {
             setRequest(false);
@@ -76,128 +69,121 @@ export default function DocterHomePage() {
   }, [currentUser, register]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans relative overflow-x-hidden">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       <Navbar />
 
-      {/* Ambient Light */}
-      <div className="absolute top-20 right-1/4 w-[500px] h-[500px] bg-teal-500/10 rounded-full blur-[140px] pointer-events-none" />
-
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-12 flex flex-col items-center justify-center z-10">
-        
+      <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-12 flex flex-col items-center justify-center">
         {loading ? (
           <div className="text-center py-16 text-slate-400 space-y-3">
-            <div className="w-8 h-8 border-2 border-teal-400 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-sm">Verifying doctor profile status...</p>
+            <div className="w-6 h-6 border-2 border-teal-400 border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-xs">Verifying doctor account status...</p>
           </div>
         ) : !request ? (
-          /* Request Doctor Account Card */
-          <div className="w-full p-8 rounded-3xl bg-slate-900/90 border border-slate-800/80 backdrop-blur-xl shadow-2xl text-center space-y-6 max-w-lg">
-            <div className="w-16 h-16 rounded-2xl bg-teal-500/10 border border-teal-500/30 text-teal-400 flex items-center justify-center mx-auto shadow-lg">
-              <Stethoscope className="w-8 h-8" />
+          <div className="w-full p-6 sm:p-8 rounded-2xl bg-slate-900 border border-slate-800 text-center space-y-5 max-w-lg">
+            <div className="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center mx-auto">
+              <Stethoscope className="w-6 h-6" />
             </div>
 
-            <div className="space-y-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/20 text-xs font-semibold">
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-800 text-teal-400 text-xs font-medium">
                 <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
-                <span>Doctor Onboarding Portal</span>
+                <span>Doctor Portal</span>
               </div>
-              <h2 className="text-2xl font-black text-white">Join as a Verified Doctor</h2>
+              <h2 className="text-xl font-bold text-white">Register as a Practicing Physician</h2>
               <p className="text-xs text-slate-400">
-                You have created a user account. Complete your medical profile request to start accepting patient appointments.
+                Submit your credentials and hospital affiliation to start accepting patient appointments.
               </p>
             </div>
 
             <button
               onClick={() => setRegister(true)}
-              className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-slate-950 font-extrabold text-sm shadow-xl shadow-teal-500/25 flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="w-full py-2.5 px-4 rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
             >
               <PlusCircle className="w-4 h-4" />
-              <span>Submit Doctor Registration Request</span>
+              <span>Complete Doctor Registration</span>
             </button>
           </div>
         ) : (
-          /* Application Submitted Status Card */
-          <div className="w-full p-8 rounded-3xl bg-slate-900/90 border border-slate-800/80 backdrop-blur-xl shadow-2xl space-y-6 max-w-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
+          <div className="w-full p-6 sm:p-8 rounded-2xl bg-slate-900 border border-slate-800 space-y-5 max-w-2xl">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
               <div>
-                <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
+                <h2 className="text-lg font-bold text-white flex items-center gap-2">
                   <UserCheck className="w-5 h-5 text-teal-400" />
-                  <span>Doctor Registration Details</span>
+                  <span>Doctor Account Overview</span>
                 </h2>
-                <p className="text-xs text-slate-400 mt-0.5">Application submitted for admin verification</p>
+                <p className="text-xs text-slate-400 mt-0.5">Verification status and profile details</p>
               </div>
 
               <span
-                className={`px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5 ${
+                className={`px-3 py-1 rounded-full text-xs font-medium border flex items-center gap-1.5 ${
                   docter.status === "true"
-                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                    : "bg-amber-500/10 text-amber-400 border-amber-500/30 animate-pulse"
+                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                    : "bg-amber-500/10 text-amber-300 border-amber-500/20"
                 }`}
               >
                 {docter.status === "true" ? (
                   <>
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    Approved Doctor
+                    Verified Practitioner
                   </>
                 ) : (
                   <>
                     <Clock className="w-3.5 h-3.5" />
-                    Pending Admin Approval
+                    Pending Verification
                   </>
                 )}
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
-                <span className="text-slate-500 font-medium">Doctor Name</span>
-                <div className="font-bold text-white text-sm">{docter.name}</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-0.5">
+                <span className="text-slate-500">Name</span>
+                <div className="font-semibold text-white">{docter.name}</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
-                <span className="text-slate-500 font-medium">Email Address</span>
-                <div className="font-bold text-slate-200">{docter.email}</div>
+              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-0.5">
+                <span className="text-slate-500">Email</span>
+                <div className="font-semibold text-slate-200">{docter.email}</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
-                <span className="text-slate-500 font-medium">Specialization</span>
-                <div className="font-bold text-teal-400">{docter.specialization?.name}</div>
+              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-0.5">
+                <span className="text-slate-500">Specialty</span>
+                <div className="font-semibold text-teal-400">{docter.specialization?.name}</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
-                <span className="text-slate-500 font-medium">Experience</span>
-                <div className="font-bold text-slate-200">{docter.experience} Years</div>
+              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-0.5">
+                <span className="text-slate-500">Experience</span>
+                <div className="font-semibold text-slate-200">{docter.experience || "Not listed"}</div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1 sm:col-span-2">
-                <span className="text-slate-500 font-medium">Affiliated Hospital</span>
-                <div className="font-bold text-slate-200">
+              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-0.5 sm:col-span-2">
+                <span className="text-slate-500">Hospital Affiliation</span>
+                <div className="font-semibold text-slate-200">
                   {docter.hospital?.name} ({docter.hospital?.location})
                 </div>
               </div>
             </div>
 
             {docter.status === "false" && (
-              <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs text-center space-y-1">
-                <div className="font-bold">Pending Review</div>
-                <div>Your request has been logged. An administrator will verify your credentials soon.</div>
+              <div className="p-3.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs text-center space-y-1">
+                <div className="font-semibold">Review in Progress</div>
+                <div className="text-amber-300/80">Your doctor registration has been received and is awaiting clinical verification by administrator.</div>
               </div>
             )}
           </div>
         )}
 
-        {/* Modal for Doctor Registration */}
         <Modal
-          title="Doctor Registration Request"
+          title="Doctor Registration"
           open={register}
           onCancel={() => setRegister(false)}
           footer={null}
           centered
-          width={500}
+          width={480}
         >
-          <Form layout="vertical" onFinish={DoctorPostRegister} className="pt-2 space-y-3">
-            <Form.Item label="Doctor Full Name" name="name" rules={[{ required: true, message: "Required" }]}>
-              <Input placeholder="Dr. Jane Smith" />
+          <Form layout="vertical" onFinish={DoctorPostRegister} className="pt-2 space-y-2">
+            <Form.Item label="Full Name with Title" name="name" rules={[{ required: true, message: "Required" }]}>
+              <Input placeholder="Dr. Full Name" />
             </Form.Item>
 
             <Form.Item label="Email" name="email" rules={[{ required: true, message: "Required" }]}>
@@ -209,15 +195,15 @@ export default function DocterHomePage() {
             </Form.Item>
 
             <Form.Item label="Years of Experience" name="experience" rules={[{ required: true, message: "Required" }]}>
-              <Input placeholder="e.g. 8 Years" />
+              <Input placeholder="e.g. 10 Years" />
             </Form.Item>
 
-            <Form.Item label="Profile Image URL" name="imglink">
+            <Form.Item label="Profile Photo Link" name="imglink">
               <Input placeholder="https://..." />
             </Form.Item>
 
-            <Form.Item label="Specialization" name="specializationId" rules={[{ required: true, message: "Required" }]}>
-              <Select placeholder="Select Specialization">
+            <Form.Item label="Specialty" name="specializationId" rules={[{ required: true, message: "Required" }]}>
+              <Select placeholder="Select Specialty">
                 {specialization.map((spec) => (
                   <Select.Option key={spec.id} value={spec.id}>
                     {spec.Name || spec.name}
@@ -226,7 +212,7 @@ export default function DocterHomePage() {
               </Select>
             </Form.Item>
 
-            <Form.Item label="Affiliated Hospital" name="hospitalId" rules={[{ required: true, message: "Required" }]}>
+            <Form.Item label="Hospital Affiliation" name="hospitalId" rules={[{ required: true, message: "Required" }]}>
               <Select placeholder="Select Hospital">
                 {hospitals.map((h) => (
                   <Select.Option key={h.id} value={h.id}>
@@ -236,16 +222,15 @@ export default function DocterHomePage() {
               </Select>
             </Form.Item>
 
-            <Button type="primary" htmlType="submit" block className="mt-4 bg-teal-600 hover:bg-teal-500 font-bold">
-              Submit Doctor Application
+            <Button type="primary" htmlType="submit" block className="mt-3 bg-teal-600 hover:bg-teal-500 font-bold">
+              Submit Profile
             </Button>
           </Form>
         </Modal>
-
       </main>
 
-      <footer className="w-full py-6 text-center text-xs text-slate-500 border-t border-slate-900 mt-12 z-10">
-        © {new Date().getFullYear()} MediTrust Health Platform. All rights reserved.
+      <footer className="w-full py-5 text-center text-xs text-slate-500 border-t border-slate-900 mt-12">
+        © {new Date().getFullYear()} MediTrust Health Network.
       </footer>
     </div>
   );

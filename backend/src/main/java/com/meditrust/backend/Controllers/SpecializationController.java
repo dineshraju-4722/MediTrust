@@ -1,6 +1,5 @@
 package com.meditrust.backend.Controllers;
 
-
 import java.util.List;
 
 import com.meditrust.backend.Dto.GetDoctersDto;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 @RestController
 @CrossOrigin("*")
 public class SpecializationController {
@@ -26,25 +23,22 @@ public class SpecializationController {
     private SpecializationService sserv;
 
     @GetMapping("/getSpecialization/{id}")
-    public ResponseEntity<SpecializationEntity> gettingById(@PathVariable("id") int id) {
+    public ResponseEntity<SpecializationEntity> getSpecializationById(@PathVariable("id") int id) {
         return ResponseEntity.ok(sserv.getById(id));
     }
 
     @GetMapping("/getAllSpecilizations")
-    public List<GetSpecializationDto> getAll(){
+    public List<GetSpecializationDto> getAllSpecializations() {
         return sserv.getAllSpecialations();
     }
 
     @GetMapping("/getSpecializationByName/{name}")
-    public ResponseEntity<List<GetDoctersDto>> gettingByName(@PathVariable("name") String name) {
+    public ResponseEntity<List<GetDoctersDto>> getDoctorsBySpecialization(@PathVariable("name") String name) {
         return ResponseEntity.ok(sserv.getDoctorsByName(name));
     }
 
     @PostMapping("/postSpecialization")
-    public SpecializationEntity gettingById(@RequestBody SpecializationEntity body) {
+    public SpecializationEntity createSpecialization(@RequestBody SpecializationEntity body) {
         return sserv.postSpecialization(body);
     }
-
-
-
 }

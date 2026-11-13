@@ -1,7 +1,7 @@
 package com.meditrust.backend.Entities;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,7 +15,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -38,11 +37,9 @@ public class DocterEntity {
     @Column(unique = true)
     private String email;
 
-
     private String contact;
 
-
-    private String status="false";
+    private String status = "false";
 
     private String experience;
 
@@ -50,13 +47,10 @@ public class DocterEntity {
     @JoinColumn(name = "specialization_id")
     private SpecializationEntity specialization;
 
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hospital_id")
     private HospitalEntity hospital;
 
-
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AppointmentEntity> appointments = new ArrayList<>();
-
 }

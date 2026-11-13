@@ -1,215 +1,25 @@
-body {
-  padding: 0;
-  margin: 0;
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-
-
 }
-
-::-webkit-scrollbar {
-  display: none;
-  /* Chrome, Safari */
-}
-
 
 body {
-  width: 100vw;
-  height: 100vh;
-  background-image: url("https://img.freepik.com/free-vector/clean-medical-background_53876-97927.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
-}
-
-@keyframes heartbeat {
-
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  25% {
-    transform: scale(1.2);
-  }
-
-  50% {
-    transform: scale(0.9);
-  }
-
-  75% {
-    transform: scale(1.2);
-  }
-}
-
-.heart-animate {
-  margin-left: 15rem;
-  margin-top: 7rem;
-  font-size: 10rem;
-  display: inline-block;
-  animation: heartbeat 8s infinite ease-in-out;
-  transform-origin: center;
-}
-
-/* 
-body {
-  width: 80vw;
-  height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  perspective: 1000px;
-  overflow: hidden;
   margin: 0;
-
-}
-
-.scene {
-  width: 400px;
-  height: 300px;
-
-}
-
-.carousel {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  animation: rotates 15s infinite linear;
-}
-
-.carousel__card {
-
-  position: absolute;
-  width: 30%;
-  height: 50%;
-  color: black;
-  font-size: 1.2em;
-}
-
-.card--1 {
-  background: #2c006b;
-  transform: rotateY(0deg) translateZ(210px);
-}
-
-.card--2 {
-  background: #6c5ce7;
-  transform: rotateY(90deg) translateZ(210px);
-}
-
-.card--3 {
-  background: #00b894;
-  transform: rotateY(180deg) translateZ(210px);
-}
-
-.card--4 {
-  background: #e17055;
-  transform: rotateY(270deg) translateZ(210px);
-}
-
-@keyframes rotates {
-  from {
-    transform: translateZ(-210px) rotateY(0deg);
-  }
-
-  to {
-    transform: translateZ(-210px) rotateY(-360deg);
-  }
-} */
-
-
-.login-page {
-  width: 100vw;
-  height: 100vh;
-  background-image: url("https://static.vecteezy.com/ti/fotos-gratis/t1/6966085-icone-medico-rede-conexao-com-interface-de-tela-virtual-moderna-em-fundo-hospital-tecnologia-tecnologia-rede-conceito-foto.jpg");
-  background-position: center;
-
-  background-repeat: no-repeat;
-  background-size: cover;
+  padding: 0;
+  min-height: 100vh;
+  background-color: #020617;
+  color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
-  /* Chrome, Safari */
 }
 
-
-@media (max-width:600px) {
-  .doctot-admin-page{
-    flex-direction: column;
-  }
-  
-}
-
-@media (max-width: 790px) {
-  .docterpage {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 3rem;
-    overflow: auto;
-    padding-left: 2vw;
-    padding-right: 2vw;
-  }
-
-  .doctertabs {
-    width: 95%;
-    padding: 7vw;
-  }
-
-  .img-handling {
-    gap: 5vw;
-  }
-}
-
-@media (min-width: 791px) {
-
-  .doctertabs {
-    width: 45%;
-  }
-}
-
-@media (max-width: 900px) {
-
-  .mainpage {
-    gap: 2rem;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .inputspec {
-    width: 80vw;
-  }
-
-  .history {
-    width: 80vw;
-  }
-}
-
-@media (min-width: 901px) {
-
-  .mainpage {
-    padding-left: 7rem;
-    padding-right: 7rem;
-  }
-}
-
-.heart {
-  animation: heartfunction 5s linear infinite;
-  transform-origin: center;
-}
-
-@keyframes heartfunction {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.3);
-  }
-
-  100% {
-    transform: scale(1);
-  }
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

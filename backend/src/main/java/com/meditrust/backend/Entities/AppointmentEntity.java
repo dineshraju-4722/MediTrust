@@ -1,8 +1,6 @@
 package com.meditrust.backend.Entities;
 
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import jakarta.persistence.Entity;
@@ -17,13 +15,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Table(name = "appointments")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppointmentEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -31,8 +29,6 @@ public class AppointmentEntity {
     private LocalDate appointmentDate;
 
     private LocalTime appointmentTime;
-
-
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
